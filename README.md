@@ -82,6 +82,6 @@ npm run dev
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Next.js, React 19, Tailwind CSS v4, Framer Motion, TypeScript, Lucide React
+- **Frontend**: React 19, Tailwind CSS v4, Lucide React
 - **Backend**: FastAPI, Python, Uvicorn, Pydantic
 - **AI / RAG**: LangChain, FAISS (Vector Database), Sentence Transformers, YouTube Transcript API
