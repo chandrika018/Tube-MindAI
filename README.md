@@ -1,77 +1,87 @@
-# 🎥 YouTube & Document Chat Assistant
+# 🎥 TubeMind AI (YouTube & Document Chat)
 
-This project now provides a production-ready Streamlit experience for chatting with YouTube transcripts and uploaded documents using retrieval-augmented generation (RAG).
+This project is a modern, full-stack web application that allows users to chat with YouTube transcripts and uploaded documents using Retrieval-Augmented Generation (RAG). 
 
-## ✅ What changed
-
-- Replaced the broken graph-based UI with a stable Streamlit app.
-- Added modular loaders for YouTube transcripts and PDF/DOCX/TXT files.
-- Added FAISS-backed vector stores that persist per source.
-- Added a combined retriever for YouTube, documents, or both.
-- Added graceful error handling for invalid URLs, unsupported files, empty content, and missing API keys.
-- Added regression tests for URL parsing and document validation.
+The application has been upgraded from a single Streamlit script to a **Next.js** frontend and a **FastAPI** backend for a production-ready user experience, scalable architecture, and dynamic UI.
 
 ## 🚀 Features
 
-- Paste a YouTube URL and process its transcript.
-- Upload multiple PDF, DOCX, or TXT files.
-- Choose YouTube, Documents, or Both as the knowledge source.
-- Ask questions and receive grounded answers from retrieved context.
-- Keep chat history during the session.
-- Reset the chat or the processed knowledge state.
+- **YouTube Transcript Processing**: Paste a YouTube URL and instantly interact with its content.
+- **Document Chat**: Upload multiple PDF, DOCX, or TXT files.
+- **Flexible Knowledge Source**: Choose to chat with YouTube content, your Documents, or Both simultaneously.
+- **Modern UI/UX**: Sleek, responsive interface built with Next.js, Tailwind CSS, and Framer Motion for micro-animations.
+- **Robust AI Backend**: Powered by FastAPI, LangChain, and FAISS for fast and accurate context retrieval.
 
-## 🧱 Project structure
+## 🧱 Project Structure
 
 ```text
-youtube-chat/
-├── app.py
-├── chatbot.py
-├── docuLoader.py
-├── embedding.py
-├── loaders/
-├── processing/
-├── prompts/
-├── retrievers/
-├── tests/
-├── utils/
-├── vectorstore/
-└── requirements.txt
+youtube-web/
+├── backend/          # FastAPI backend (Python)
+│   ├── app/          # Core API logic, services, endpoints
+│   ├── data/         # Vector store data and uploads storage
+│   ├── tests/        # Backend tests
+│   ├── requirements.txt
+│   └── run.py        # Entry point for the backend server
+└── frontend/         # Next.js frontend (React/TypeScript)
+    ├── public/       # Static assets
+    ├── src/          # Source code (app router, components, UI)
+    ├── package.json  # NPM dependencies
+    └── eslint/tsconfig configuration
 ```
 
-## ⚙️ Installation
+## ⚙️ Getting Started
+
+### 1. Backend Setup (FastAPI)
+
+Navigate to the `backend` directory, set up your Python environment, and start the FastAPI server:
 
 ```bash
+cd backend
+
+# Create and activate virtual environment
 python -m venv venv
+
+# Windows:
 venv\Scripts\activate
+# Mac/Linux:
+# source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## 🔐 Environment variables
-
-Create a .env file with:
+**Environment Variables:**
+Create a `.env` file in the `backend/` directory with your necessary API keys (e.g., GROQ_API_KEY):
 
 ```env
 GROQ_API_KEY=your_groq_api_key
 ```
 
-If no API key is present, the app will fall back to a lightweight local response mode so the UI still runs.
+**Run the backend:**
+```bash
+python run.py
+```
+*The backend API will be running at http://localhost:8000*
 
-## ▶️ Run the app
+### 2. Frontend Setup (Next.js)
+
+Open a new terminal, navigate to the `frontend` directory, install dependencies, and start the development server:
 
 ```bash
-streamlit run app.py
+cd frontend
+
+# Install dependencies
+npm install
+# or yarn install / pnpm install
+
+# Start the development server
+npm run dev
 ```
 
-Then open the local URL shown by Streamlit.
+*Open [http://localhost:3000](http://localhost:3000) in your browser to interact with the application.*
 
-## 🧪 Tests
+## 🛠️ Technology Stack
 
-```bash
-pytest -q tests/test_pipeline.py
-```
-
-## 📝 Notes
-
-- The current implementation uses FAISS for vector storage.
-- YouTube transcript fetching relies on the YouTube Transcript API and may fail for private or transcript-disabled videos.
-- Document loading supports PDF, DOCX, and TXT files only.
+- **Frontend**: Next.js, React 19, Tailwind CSS v4, Framer Motion, TypeScript, Lucide React
+- **Backend**: FastAPI, Python, Uvicorn, Pydantic
+- **AI / RAG**: LangChain, FAISS (Vector Database), Sentence Transformers, YouTube Transcript API
