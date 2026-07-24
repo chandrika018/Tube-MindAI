@@ -1,101 +1,112 @@
-# 🎥 TubeMind AI (Enterprise Application)
+# 🎥 TubeMind AI
 
-TubeMind AI is an enterprise-grade, full-stack web application that allows users to chat with YouTube transcripts and documents using Advanced Retrieval-Augmented Generation (RAG). 
+> **An enterprise-grade, full-stack AI platform to intelligently interact with YouTube transcripts and documents.**
 
-The platform has been rebuilt from a lightweight prototype into a production-ready system featuring a **Next.js** frontend and a **FastAPI** backend with a **PostgreSQL** database and robust Clean Architecture.
+![Python](https://img.shields.io/badge/Python-3.10+-yellow.svg)
+![Next.js](https://img.shields.io/badge/Next.js-16+-black.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
 
-## 🚀 Features
+TubeMind AI transforms the way you learn and gather information from YouTube videos. It leverages Advanced Retrieval-Augmented Generation (RAG) to let you chat with video transcripts, discover related content, and even fallback to web searches when transcripts are unavailable.
 
-- **Robust Authentication:** Secure JWT-based signup and login system.
-- **YouTube Transcript Processing:** Intelligent AI chat based on video transcripts.
-- **Web Search Fallback:** Automatically scrapes the web if a YouTube transcript is unavailable.
-- **AI Recommendation Engine:** Generates highly relevant YouTube video recommendations utilizing LangChain and LLMs.
-- **Modern UI/UX:** Sleek, responsive interface built with Next.js, Tailwind CSS, and Framer Motion.
-- **Scalable Backend:** Powered by FastAPI, SQLAlchemy (Async), Alembic, and PostgreSQL.
+## ✨ Key Features
 
-## 🧱 Project Structure (Clean Architecture)
+- 🔐 **Secure Authentication**: Robust JWT-based signup and login system.
+- 💬 **Intelligent YouTube Chat**: Ask questions and get answers directly from video transcripts using RAG.
+- 🌐 **Smart Web Fallback**: Automatically searches the web if a video lacks a transcript.
+- 🎯 **AI Recommendations**: Get highly relevant video recommendations powered by LangChain and LLMs.
+- 🎨 **Modern Interface**: A sleek, responsive, and dynamic UI built with Next.js, Tailwind CSS v4, and Framer Motion.
+- ⚡ **Scalable Architecture**: A high-performance FastAPI backend with PostgreSQL, adhering to Clean Architecture principles.
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **Framework**: Next.js (React 19)
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Language**: TypeScript
+
+### Backend
+- **Framework**: FastAPI (Python)
+- **Database**: PostgreSQL
+- **ORM & Migrations**: SQLAlchemy 2.0 (asyncpg), Alembic
+- **Security**: Passlib, python-jose (JWT)
+
+### AI & Machine Learning
+- **Orchestration**: LangChain
+- **Vector Store**: FAISS
+- **Embeddings**: Sentence Transformers
+- **Data Source**: YouTube Transcript API
+
+## 📂 Project Structure
 
 ```text
 TubeMind-AI/
-├── backend/          # FastAPI backend (Python)
-│   ├── alembic/      # Database migrations
+├── backend/                  # FastAPI Backend
+│   ├── alembic/              # Database migrations
 │   ├── app/          
-│   │   ├── api/          # API Routers, Middleware, Dependencies
-│   │   ├── core/         # Settings, Security, Database config
-│   │   ├── models/       # SQLAlchemy DB Models (UUID, Soft Deletes)
-│   │   ├── schemas/      # Pydantic validation schemas
-│   │   ├── repositories/ # CRUD operations abstraction
-│   │   ├── services/     # AI logic, YouTube Fetching, RAG
-│   │   ├── chatbot/      # Chat management
-│   │   ├── recommendation/ # Recommendation logic
-│   │   ├── embeddings/   # FAISS Vector Store logic
-│   │   └── main.py       # Application entry point
-│   └── requirements.txt
+│   │   ├── api/              # API Routers & Endpoints
+│   │   ├── core/             # Configuration & Security settings
+│   │   ├── models/           # SQLAlchemy DB Models
+│   │   ├── schemas/          # Pydantic validation schemas
+│   │   ├── repositories/     # Database operations
+│   │   ├── services/         # Core business logic (AI, RAG, YouTube)
+│   │   └── main.py           # Application Entry Point
+│   └── requirements.txt      # Python dependencies
 │
-└── frontend/         # Next.js frontend (React/TypeScript)
-    └── src/
-        ├── app/          # Next.js App Router pages
-        ├── components/   # Reusable UI components
-        ├── features/     # Feature-specific logic
-        ├── services/     # API clients
-        ├── hooks/        # React hooks
-        └── context/      # Global state
+└── frontend/                 # Next.js Frontend
+    ├── src/
+    │   ├── app/              # Next.js App Router pages
+    │   ├── components/       # Reusable React components
+    │   ├── services/         # API clients
+    │   └── ...               # Hooks, context, and features
+    ├── package.json          # Node dependencies
+    └── tailwind.config.ts    # Tailwind configuration
 ```
 
-## ⚙️ Getting Started
+## 🚀 Getting Started
 
-### 1. Database Setup (PostgreSQL)
+### 1. Prerequisites
+- **Node.js** (v18 or higher)
+- **Python** (v3.10 or higher)
+- **PostgreSQL** running locally (Create a database named `tubemind`)
 
-You will need a local instance of **PostgreSQL** running.
-Create a database named `tubemind`.
-
-Default credentials configured in the system:
-- User: `postgres`
-- Password: `postgres`
-- Port: `5432`
-
-### 2. Backend Setup (FastAPI)
-
-Navigate to the `backend` directory and set up your Python environment:
+### 2. Backend Setup
 
 ```bash
 cd backend
 
 # Create and activate virtual environment
 python -m venv venv
-
-# Windows:
+# On Windows:
 venv\Scripts\activate
-# Mac/Linux:
+# On Mac/Linux:
 # source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-**Environment Variables:**
-Create a `.env` file in the `backend/` directory with your necessary API keys:
-
+**Environment Variables**
+Create a `.env` file in the `backend/` directory:
 ```env
 GROQ_API_KEY=your_groq_api_key
-JWT_SECRET=super_secret_production_key_here
+JWT_SECRET=your_super_secret_key
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/tubemind
 ```
 
-**Run Database Migrations:**
-Initialize the PostgreSQL database tables using Alembic:
+**Initialize Database**
 ```bash
 alembic upgrade head
 ```
 
-**Run the Backend Server:**
+**Run the Server**
 ```bash
 uvicorn app.main:app --reload
 ```
-*The backend API will be running at http://localhost:8000*
+*API will be available at `http://localhost:8000`*
 
-### 3. Frontend Setup (Next.js)
-
-Open a new terminal, navigate to the `frontend` directory, install dependencies, and start the development server:
+### 3. Frontend Setup
 
 ```bash
 cd frontend
@@ -106,18 +117,8 @@ npm install
 # Start the development server
 npm run dev
 ```
+*Frontend will be available at `http://localhost:3000`*
 
-*Open [http://localhost:3000](http://localhost:3000) in your browser to interact with the application.*
+## 📜 License
 
-## 🛠️ Technology Stack
-
-<<<<<<< HEAD
-- **Frontend**: React 19, Tailwind CSS v4, Lucide React
-- **Backend**: FastAPI, Python, Uvicorn, Pydantic
-- **AI / RAG**: LangChain, FAISS (Vector Database), Sentence Transformers, YouTube Transcript API
-=======
-- **Frontend**: Next.js, React 19, Tailwind CSS v4, Framer Motion, TypeScript
-- **Backend**: FastAPI, Python, Uvicorn, Pydantic, Passlib, python-jose
-- **Database / ORM**: PostgreSQL, SQLAlchemy 2.0 (asyncpg), Alembic
-- **AI / RAG**: LangChain, FAISS (Vector Database), Sentence Transformers, YouTube Transcript API
->>>>>>> 83098c1 (chore: update README and frontend changes)
+This project is licensed under the MIT License.
