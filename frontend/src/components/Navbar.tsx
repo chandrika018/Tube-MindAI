@@ -9,7 +9,9 @@ import {
   TrendingUp, 
   Settings, 
   Flame,
-  Brain
+  Brain,
+  Sun,
+  Moon
 } from "lucide-react";
 
 interface NavbarProps {
@@ -19,6 +21,16 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, activeModel }) => {
+  const [isLightMode, setIsLightMode] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isLightMode) {
+      document.documentElement.classList.add("light-mode");
+    } else {
+      document.documentElement.classList.remove("light-mode");
+    }
+  }, [isLightMode]);
+
   const menuItems = [
     { id: "home", label: "Home", icon: Home },
     { id: "recommendations", label: "AI Recommendations", icon: Compass },
@@ -78,6 +90,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, activeM
             Model: {activeModel}
           </span>
         </div>
+
+        {/* Theme toggle button */}
+        <button
+          onClick={() => setIsLightMode(!isLightMode)}
+          className="p-2.5 rounded-xl border transition-colors duration-200 bg-slate-900/30 border-slate-800 text-slate-400 hover:text-white hover:border-slate-750 preserve-colors"
+          title="Toggle Light/Dark Mode"
+        >
+          {isLightMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+        </button>
 
         {/* Settings shortcut button */}
         <button

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.routes import auth, recommendations
+from app.api.routes import auth, recommendations, analyze, chat
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -18,6 +18,8 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(recommendations.router, prefix="/api/recommend", tags=["recommendations"])
+app.include_router(analyze.router, prefix="/api/analyze", tags=["analyze"])
+app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
 
 @app.get("/api/health", tags=["health"])
 async def health_check():
@@ -44,6 +46,3 @@ async def get_analytics():
 async def get_bookmarks():
     return []
 
-@app.get("/api/chat/sessions")
-async def get_chat_sessions():
-    return []

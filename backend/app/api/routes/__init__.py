@@ -1,3 +1,3 @@
-from . import auth
+from . import auth, recommendations, analyze, chat
 
-__all__ = ["auth"]
+__all__ = ["auth", "recommendations", "analyze", "chat"]

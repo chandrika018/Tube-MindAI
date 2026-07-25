@@ -104,3 +104,16 @@ body {
 .animate-glow-border {
   animation: borderGlow 4s infinite ease-in-out;
 }
+
+/* Light Mode Support via Color Inversion */
+html.light-mode {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: #060814; /* Inverts to bright off-white */
+}
+
+html.light-mode img,
+html.light-mode video,
+html.light-mode iframe,
+html.light-mode .preserve-colors {
+  filter: invert(1) hue-rotate(180deg);
+}
