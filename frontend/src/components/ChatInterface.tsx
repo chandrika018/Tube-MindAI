@@ -52,15 +52,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [shareStatus, setShareStatus] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
-
-  // Sync initial URL if passed from dashboard
-  useEffect(() => {
-    if (initialVideoUrl) {
-      setVideoUrl(initialVideoUrl);
-      handleAnalyze(initialVideoUrl);
-    }
-  }, [initialVideoUrl]);
 
   // Scroll to bottom of chat
   useEffect(() => {
@@ -74,6 +67,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }).catch(console.error);
     
     // Init speech recognition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       const rec = new SpeechRecognition();
@@ -81,6 +75,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       rec.interimResults = false;
       rec.lang = "en-US";
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       rec.onresult = (event: any) => {
         const text = event.results[0][0].transcript;
         setInputMessage(prev => prev + " " + text);
@@ -122,12 +117,23 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }
       
       if (onAnalysisSuccess) onAnalysisSuccess();
-    } catch (e: any) {
-      alert(e.message || "Failed to analyze video. Check URL.");
+    } catch (e) {
+      const err = e as Error;
+      alert(err.message || "Failed to analyze video. Check URL.");
     } finally {
       setLoading(false);
     }
   };
+
+  // Sync initial URL if passed from dashboard
+  useEffect(() => {
+    if (initialVideoUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setVideoUrl(initialVideoUrl);
+      handleAnalyze(initialVideoUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialVideoUrl]);
 
   const handleSendMessage = async (textToSend?: string) => {
     const query = textToSend || inputMessage;

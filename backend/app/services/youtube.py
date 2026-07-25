@@ -4,7 +4,7 @@ import urllib.parse
 import requests
 from typing import List, Dict, Any, Optional
 from youtube_transcript_api import YouTubeTranscriptApi
-from backend.app.config.config import settings
+from app.config.config import settings
 
 class YouTubeService:
     def __init__(self):

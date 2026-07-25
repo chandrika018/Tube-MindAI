@@ -18,11 +18,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onSettingsSaved })
     }
   });
   
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
     apiService.getSettings()
       .then((data) => {
         // Enforce structures

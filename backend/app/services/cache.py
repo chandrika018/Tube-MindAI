@@ -1,6 +1,6 @@
 import json
 from typing import Any, Optional
-from backend.app.config.config import settings
+from app.config.config import settings
 
 class CacheManager:
     def __init__(self):

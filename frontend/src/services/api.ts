@@ -13,6 +13,7 @@ export interface VideoScore {
 
 export interface VideoItem {
   id: string;
+  video_id?: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -95,9 +96,18 @@ export interface AppSettings {
 export const apiService = {
   // Settings
   async getSettings(): Promise<AppSettings> {
-    const res = await fetch(`${API_BASE_URL}/api/settings`);
-    if (!res.ok) throw new Error("Failed to fetch settings");
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/settings`);
+      if (!res.ok) throw new Error("Failed to fetch settings");
+      return await res.json();
+    } catch (error) {
+      console.warn("Using fallback settings due to API error:", error);
+      return {
+        active_model: "llama3-8b-8192",
+        vector_db: "faiss",
+        api_keys: {}
+      };
+    }
   },
 
   async updateSettings(settings: AppSettings): Promise<AppSettings> {
@@ -112,17 +122,32 @@ export const apiService = {
 
   // Analytics
   async getAnalytics(): Promise<AnalyticsData> {
-    const res = await fetch(`${API_BASE_URL}/api/analytics`);
-    if (!res.ok) throw new Error("Failed to fetch analytics");
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/analytics`);
+      if (!res.ok) throw new Error("Failed to fetch analytics");
+      return await res.json();
+    } catch (error) {
+      console.warn("Using fallback analytics due to API error:", error);
+      return {
+        videos_analyzed_count: 0,
+        recommendations_generated_count: 0,
+        average_ai_score: 0,
+        searched_topics: {}
+      };
+    }
   },
 
   // Recommendations Engine
   async recommendVideos(q: string, mode: string): Promise<VideoItem[]> {
-    const params = new URLSearchParams({ q, mode });
-    const res = await fetch(`${API_BASE_URL}/api/recommend?${params.toString()}`);
-    if (!res.ok) throw new Error("Failed to fetch recommendations");
-    return res.json();
+    try {
+      const params = new URLSearchParams({ q, mode });
+      const res = await fetch(`${API_BASE_URL}/api/recommend?${params.toString()}`);
+      if (!res.ok) throw new Error("Failed to fetch recommendations");
+      return await res.json();
+    } catch (error) {
+      console.warn("Using fallback recommendations due to API error:", error);
+      return [];
+    }
   },
 
   // Video Intelligence Analyzer
@@ -140,13 +165,18 @@ export const apiService = {
   },
 
   // Bookmarks
-  async getBookmarks(): Promise<any[]> {
-    const res = await fetch(`${API_BASE_URL}/api/bookmarks`);
-    if (!res.ok) throw new Error("Failed to fetch bookmarks");
-    return res.json();
+  async getBookmarks(): Promise<VideoItem[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/bookmarks`);
+      if (!res.ok) throw new Error("Failed to fetch bookmarks");
+      return await res.json();
+    } catch (error) {
+      console.warn("Using fallback bookmarks due to API error:", error);
+      return [];
+    }
   },
 
-  async addBookmark(video: any): Promise<boolean> {
+  async addBookmark(video: VideoItem): Promise<boolean> {
     const res = await fetch(`${API_BASE_URL}/api/bookmarks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -164,9 +194,14 @@ export const apiService = {
 
   // Chat
   async getChatSessions(): Promise<ChatSession[]> {
-    const res = await fetch(`${API_BASE_URL}/api/chat/sessions`);
-    if (!res.ok) throw new Error("Failed to fetch chat sessions");
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/chat/sessions`);
+      if (!res.ok) throw new Error("Failed to fetch chat sessions");
+      return await res.json();
+    } catch (error) {
+      console.warn("Using fallback chat sessions due to API error:", error);
+      return [];
+    }
   },
 
   async getChatSession(sessionId: string): Promise<ChatSession> {

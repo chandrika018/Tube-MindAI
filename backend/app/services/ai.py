@@ -27,7 +27,7 @@ except ImportError:
         except ImportError:
             ChatOllama = None
 
-from backend.app.config.config import settings
+from app.config.config import settings
 
 class ScoreBreakdown(BaseModel):
     similarity_score: float = Field(..., description="Semantic similarity to topic 0-100")

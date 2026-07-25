@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Search, 
-  Sparkles, 
-  Bookmark, 
-  Share2, 
-  ExternalLink, 
-  Cpu, 
-  Flame, 
-  Clock, 
-  ThumbsUp, 
+import {
+  Search,
+  Sparkles,
+  Bookmark,
+  Share2,
+  ExternalLink,
+  Cpu,
+  Flame,
+  Clock,
+  ThumbsUp,
   Eye,
   Info,
   Check,
@@ -21,8 +21,8 @@ interface RecommendationDashboardProps {
   onSelectVideoForAnalysis: (url: string) => void;
 }
 
-export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = ({ 
-  onSelectVideoForAnalysis 
+export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = ({
+  onSelectVideoForAnalysis
 }) => {
   const [query, setQuery] = useState("Python Machine Learning");
   const [searchMode, setSearchMode] = useState("ai"); // normal, ai, semantic, trending, latest, channel, playlist
@@ -43,16 +43,12 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
     { id: "playlist", label: "Playlist Search", desc: "Query whole playlists" },
   ];
 
-  // Fetch initial recommended list
-  useEffect(() => {
-    handleSearch();
-    loadBookmarks();
-  }, []);
+
 
   const loadBookmarks = async () => {
     try {
       const bookmarks = await apiService.getBookmarks();
-      setSavedIds(bookmarks.map(b => b.id || b.video_id));
+      setSavedIds(bookmarks.map(b => (b.id || b.video_id) as string));
     } catch (e) {
       console.error(e);
     }
@@ -70,6 +66,14 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
       setLoading(false);
     }
   };
+
+  // Fetch initial recommended list
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    handleSearch();
+    loadBookmarks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleBookmark = async (video: VideoItem) => {
     const isBookmarked = savedIds.includes(video.id);
@@ -142,11 +146,10 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
                 setTimeout(() => handleSearch(), 50);
               }}
               title={mode.desc}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all ${
-                searchMode === mode.id
+              className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all ${searchMode === mode.id
                   ? "bg-indigo-600/10 border-indigo-500 text-indigo-300 shadow-sm"
                   : "bg-slate-900/30 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700"
-              }`}
+                }`}
             >
               {mode.label}
             </button>
@@ -157,7 +160,7 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
       {/* Embedded Player for Watch mode */}
       {activeVideoId && (
         <div className="glass-panel p-4 rounded-2xl border border-slate-800 relative animate-fadeIn">
-          <button 
+          <button
             onClick={() => setActiveVideoId(null)}
             className="absolute right-4 top-4 text-slate-400 hover:text-white text-xs font-semibold bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-lg z-10"
           >
@@ -199,8 +202,8 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
             const isShared = shareStatus[video.id] || false;
 
             return (
-              <div 
-                key={video.id} 
+              <div
+                key={video.id}
                 className="glass-card rounded-2xl overflow-hidden flex flex-col relative group"
               >
                 {/* Score Tag Top-Left overlay */}
@@ -230,7 +233,7 @@ export const RecommendationDashboard: React.FC<RecommendationDashboardProps> = (
                     <span className="text-[10px] text-indigo-400 font-bold tracking-wider uppercase">
                       {video.category || "Education"}
                     </span>
-                    <h3 
+                    <h3
                       className="text-sm font-semibold text-slate-100 leading-snug line-clamp-2 hover:text-indigo-300 cursor-pointer"
                       title={video.title}
                       onClick={() => setActiveVideoId(video.id)}
