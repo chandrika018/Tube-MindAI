@@ -289,6 +289,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setTimeout(() => setShareStatus(false), 2000);
   };
 
+  const handleExportSession = () => {
+    if (!sessionId) return;
+    // trigger backend export
+    window.location.href = `http://localhost:8000/api/chat/${sessionId}/export`;
+  };
+
   // Quick Action Prompts
   const quickPrompts = [
     { label: "Summarize Video", prompt: "Summarize this video and extract the 3 key takeaways." },
@@ -458,6 +464,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   className="p-1.5 bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 rounded-lg transition-colors"
                 >
                   {shareStatus ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  onClick={handleExportSession}
+                  title="Export Chat Session"
+                  className="p-1.5 bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 rounded-lg transition-colors"
+                >
+                  <FileText className="w-3.5 h-3.5" />
                 </button>
                 <a
                   href={apiService.getDownloadTranscriptUrl(analysis.video_id)}

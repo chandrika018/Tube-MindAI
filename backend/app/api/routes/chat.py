@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 from typing import Dict, Any, List
 import uuid
@@ -78,3 +78,28 @@ async def delete_session(session_id: str):
     if not success:
         raise HTTPException(status_code=404, detail="Chat not found")
     return {"success": True}
+
+@router.get("/{session_id}/export")
+async def export_session(session_id: str):
+    chat = db.get_chat(session_id)
+    if not chat:
+        raise HTTPException(status_code=404, detail="Chat not found")
+    
+    title = chat.get("title", "Exported Notes")
+    messages = chat.get("messages", [])
+    
+    markdown = f"# TubeMind AI Notes: {title}\n\n"
+    
+    if not messages:
+        markdown += "*No messages in this session.*\n"
+    else:
+        for msg in messages:
+            role = "You" if msg.get("role") == "user" else "TubeMind AI"
+            content = msg.get("content", "")
+            markdown += f"**{role}**: {content}\n\n---\n\n"
+            
+    headers = {
+        "Content-Disposition": f'attachment; filename="tubemind_{session_id}.md"'
+    }
+    
+    return Response(content=markdown, media_type="text/markdown", headers=headers)
